@@ -1,0 +1,14 @@
+myhostname = localhost
+mydomain = localhost
+myorigin = $myhostname
+inet_interfaces = all
+mydestination = $myhostname, localhost.$mydomain, localhost
+mynetworks = 127.0.0.0/8
+mailbox_size_limit = 0
+recipient_delimiter = +
+inet_protocols = all
+
+# PostfixAdmin settings
+virtual_alias_maps = pgsql:/etc/postfix/postfix-lookup/virtual_alias_maps.cf
+virtual_mailbox_domains = pgsql:/etc/postfix/postfix-lookup/virtual_mailbox_domains.cf
+virtual_mailbox_maps = pgsql:/etc/postfix/postfix-lookup/virtual_mailbox_maps.cf

@@ -1,0 +1,47 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postfixadmin
+      POSTGRES_PASSWORD: adminpassword
+      POSTGRES_DB: postfixadmin
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - mail-network
+
+  postfixadmin:
+    image: postfixadmin
+    environment:
+      POSTFIXADMIN_DB_TYPE: pgsql
+      POSTFIXADMIN_DB_HOST: db
+      POSTFIXADMIN_DB_NAME: postfixadmin
+      POSTFIXADMIN_DB_USER: postfixadmin
+      POSTFIXADMIN_DB_PASSWORD: adminpassword
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    networks:
+      - mail-network
+
+  postfix:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    ports:
+      - "25:25"
+      - "587:587"
+    networks:
+      - mail-network
+
+volumes:
+  postgres_data:
+  mysql_data:
+
+networks:
+  mail-network:
